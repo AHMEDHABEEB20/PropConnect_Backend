@@ -7,8 +7,8 @@ async function register(req, res) {
 }
 
 async function login(req, res) {
-  await authService.login(req.body);
-  return success(res, 'OTP sent to your email', {});
+  const data = await authService.login(req.body);
+  return success(res, 'Login successful', data);
 }
 
 async function verifyOtp(req, res) {

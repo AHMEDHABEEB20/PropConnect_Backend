@@ -81,9 +81,16 @@ async function login({ email, password }) {
     throw new ApiError(401, 'Invalid email or password');
   }
 
-  await issueOtpForEmail(user.email, 'login');
+  if (!user.isVerified) {
+    throw new ApiError(403, 'Please verify your account OTP before logging in');
+  }
 
-  return {};
+  const token = signAccessToken(user);
+
+  return {
+    token,
+    user: toPublicUser(user),
+  };
 }
 
 async function verifyOtp({ email, otp }) {

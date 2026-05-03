@@ -24,4 +24,11 @@ async function authenticate(req, res, next) {
   }
 }
 
-module.exports = { authenticate };
+function requireAdmin(req, res, next) {
+  if (!req.user || req.user.role !== 'admin') {
+    return next(new ApiError(403, 'Forbidden'));
+  }
+  next();
+}
+
+module.exports = { authenticate, requireAdmin };
