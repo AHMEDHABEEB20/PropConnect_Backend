@@ -4,6 +4,7 @@ const helmet = require('helmet');
 const authRoutes = require('./modules/auth/auth.routes');
 const userRoutes = require('./modules/users/user.routes');
 const { notFoundHandler, errorHandler } = require('./shared/middlewares/error.middleware');
+const { createGlobalRateLimiter } = require('./shared/middlewares/rateLimit.middleware');
 const { success } = require('./shared/utils/apiResponse');
 
 const app = express();
@@ -37,6 +38,7 @@ const corsOptions =
       };
 
 app.use(cors(corsOptions));
+app.use(createGlobalRateLimiter());
 
 const v1Router = express.Router();
 

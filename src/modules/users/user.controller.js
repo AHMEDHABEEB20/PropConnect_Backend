@@ -2,7 +2,10 @@ const userService = require('./user.service');
 const { success } = require('../../shared/utils/apiResponse');
 
 async function listUsers(req, res) {
-  const data = await userService.listUsers();
+  const data = await userService.listUsers({
+    page: req.query.page,
+    limit: req.query.limit,
+  });
   return success(res, 'Users retrieved', data);
 }
 

@@ -6,6 +6,9 @@ function getSecret() {
   if (!secret) {
     throw new Error('JWT_SECRET is not defined');
   }
+  if (process.env.NODE_ENV === 'production' && secret.length < 32) {
+    throw new Error('JWT_SECRET must be at least 32 characters in production');
+  }
   return secret;
 }
 
@@ -18,13 +21,13 @@ function signAccessToken(user) {
       role: user.role,
     },
     getSecret(),
-    { expiresIn }
+    { expiresIn, algorithm: 'HS256' }
   );
 }
 
 function verifyAccessToken(token) {
   try {
-    return jwt.verify(token, getSecret());
+    return jwt.verify(token, getSecret(), { algorithms: ['HS256'] });
   } catch {
     throw new ApiError(401, 'Invalid or expired token');
   }

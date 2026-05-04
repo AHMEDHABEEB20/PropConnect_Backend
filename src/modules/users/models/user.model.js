@@ -39,6 +39,9 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+// Supports admin user listing sorted by newest first.
+userSchema.index({ createdAt: -1 });
+
 module.exports = {
   User: mongoose.model('User', userSchema),
   ROLES,
