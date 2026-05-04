@@ -27,6 +27,13 @@ function setCachedUser(userId, user) {
   });
 }
 
+function clearCachedUser(userId) {
+  if (!userId) {
+    return;
+  }
+  authUserCache.delete(String(userId));
+}
+
 async function authenticate(req, res, next) {
   try {
     const header = req.headers.authorization;
@@ -64,4 +71,4 @@ function requireAdmin(req, res, next) {
   next();
 }
 
-module.exports = { authenticate, requireAdmin };
+module.exports = { authenticate, requireAdmin, clearCachedUser };

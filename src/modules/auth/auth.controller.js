@@ -26,10 +26,16 @@ async function resetPassword(req, res) {
   return success(res, 'Password reset successfully', {});
 }
 
+async function logout(req, res) {
+  await authService.logout(req.user);
+  return success(res, 'Logged out successfully', {});
+}
+
 module.exports = {
   register,
   login,
   verifyOtp,
   forgotPassword,
   resetPassword,
+  logout,
 };

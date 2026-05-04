@@ -2,6 +2,7 @@ const express = require('express');
 const { validateBody } = require('../../shared/middlewares/validation.middleware');
 const { asyncHandler } = require('../../shared/middlewares/error.middleware');
 const { createAuthRateLimiter } = require('../../shared/middlewares/rateLimit.middleware');
+const { authenticate } = require('../../shared/middlewares/auth.middleware');
 const {
   registerSchema,
   loginSchema,
@@ -29,5 +30,6 @@ router.post(
   validateBody(resetPasswordSchema),
   asyncHandler(authController.resetPassword)
 );
+router.post('/logout', authenticate, asyncHandler(authController.logout));
 
 module.exports = router;

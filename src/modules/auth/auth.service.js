@@ -5,6 +5,7 @@ const { ApiError } = require('../../shared/errors/ApiError');
 const { generateOtp } = require('../../shared/utils/generateOtp');
 const { enqueueEmail } = require('../../shared/utils/emailQueue');
 const { signAccessToken } = require('../../shared/utils/jwt.util');
+const { clearCachedUser } = require('../../shared/middlewares/auth.middleware');
 
 const OTP_TTL_MS = 5 * 60 * 1000;
 const BCRYPT_ROUNDS = 12;
@@ -156,6 +157,11 @@ async function resetPassword({ email, otp, newPassword, confirmPassword }) {
   return {};
 }
 
+async function logout(user) {
+  clearCachedUser(user?._id);
+  return {};
+}
+
 async function validateOtpForEmail(emailLower, otp) {
   const record = await Otp.findOne({ email: emailLower });
   if (!record) {
@@ -181,4 +187,5 @@ module.exports = {
   verifyOtp,
   forgotPassword,
   resetPassword,
+  logout,
 };
